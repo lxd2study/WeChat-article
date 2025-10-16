@@ -10,6 +10,14 @@
             </el-tag>
             <el-button
               size="small"
+              type="success"
+              @click="showHistoryDialog"
+            >
+              <el-icon><Tickets /></el-icon>
+              历史记录
+            </el-button>
+            <el-button
+              size="small"
               type="primary"
               :icon="Setting"
               @click="showConfigDialog"
@@ -228,6 +236,12 @@
       :current-config="currentAIConfig"
       @save="handleSaveConfig"
     />
+
+    <!-- 历史记录对话框 -->
+    <HistoryDialog
+      v-model="historyDialogVisible"
+      @load-article="loadFromHistory"
+    />
   </div>
 </template>
 
@@ -243,11 +257,14 @@ import {
   Download,
   Upload,
   CopyDocument,
-  Setting
+  Setting,
+  Tickets
 } from '@element-plus/icons-vue'
 import VditorEditor from './VditorEditor.vue'
 import AIConfigDialog from './AIConfigDialog.vue'
+import HistoryDialog from './HistoryDialog.vue'
 import aiService from '../services/aiService'
+import historyService from '../services/historyService'
 
 // 表单数据
 const formData = ref({
@@ -276,6 +293,7 @@ const optimizeInstruction = ref('')
 const importDialogVisible = ref(false)
 const importMemoryData = ref('')
 const configDialogVisible = ref(false)
+const historyDialogVisible = ref(false)
 
 // AI 配置
 const currentAIConfig = ref(aiService.getConfig())
@@ -305,6 +323,9 @@ const generateArticle = async () => {
 
     const article = await aiService.generateArticle(formData.value.topic, options)
     articleContent.value = article
+
+    // 保存到历史记录
+    saveToHistory(article)
 
     ElMessage.success('文章生成成功！')
   } catch (error) {
@@ -337,6 +358,9 @@ const optimizeArticle = async () => {
     articleContent.value = optimized
     optimizeDialogVisible.value = false
 
+    // 保存优化后的文章到历史记录
+    saveToHistory(optimized)
+
     ElMessage.success('文章优化成功！')
   } catch (error) {
     ElMessage.error(error.message)
@@ -352,6 +376,9 @@ const continueArticle = async () => {
   try {
     const continued = await aiService.continueArticle(articleContent.value)
     articleContent.value += '\n\n' + continued
+
+    // 保存续写后的文章到历史记录
+    saveToHistory(articleContent.value)
 
     ElMessage.success('文章续写成功！')
   } catch (error) {
@@ -450,6 +477,42 @@ const handleSaveConfig = (config) => {
   aiService.updateConfig(config)
   currentAIConfig.value = config
   ElMessage.success('AI 配置已保存')
+}
+
+// 保存到历史记录
+const saveToHistory = (article) => {
+  try {
+    historyService.saveToHistory({
+      topic: formData.value.topic,
+      content: article,
+      style: formData.value.style,
+      length: formData.value.length,
+      targetAudience: formData.value.targetAudience,
+      keyPoints: formData.value.keyPoints,
+      additionalRequirements: formData.value.additionalRequirements
+    })
+  } catch (error) {
+    console.error('保存历史记录失败:', error)
+  }
+}
+
+// 显示历史记录对话框
+const showHistoryDialog = () => {
+  historyDialogVisible.value = true
+}
+
+// 从历史记录加载文章
+const loadFromHistory = (historyItem) => {
+  // 加载表单数据
+  formData.value.topic = historyItem.topic || ''
+  formData.value.style = historyItem.style || 'professional'
+  formData.value.length = historyItem.length || 'medium'
+  formData.value.targetAudience = historyItem.targetAudience || ''
+  formData.value.keyPoints = historyItem.keyPoints || []
+  formData.value.additionalRequirements = historyItem.additionalRequirements || ''
+
+  // 加载文章内容
+  articleContent.value = historyItem.content || ''
 }
 </script>
 

@@ -10,6 +10,7 @@
 - **文章优化**：根据要求优化已生成的文章
 - **文章续写**：智能续写文章内容，保持风格一致
 - **实时编辑**：基于Vditor的所见即所得Markdown编辑器
+- **历史记录**：自动保存所有生成的文章，支持搜索、筛选和重新加载
 
 ### 高级功能
 - **多种文章风格**：专业严谨、轻松活泼、幽默风趣等
@@ -110,6 +111,25 @@ AI会自动记住：
 - **下载文章**：保存为Markdown文件
 - **实时预览**：所见即所得编辑
 
+### 历史记录功能
+
+**自动保存**：
+- 生成文章时自动保存
+- 优化和续写后自动更新历史
+
+**查看与管理**：
+- 查看所有历史文章
+- 支持搜索和筛选（按风格、长度、日期）
+- 预览和加载历史文章
+- 批量删除和导出功能
+
+**统计分析**：
+- 文章总数和总字数统计
+- 风格和长度分布
+- 近期活动统计
+
+详细使用说明请查看 [HISTORY_FEATURE.md](./HISTORY_FEATURE.md)
+
 ## 项目结构
 
 ```
@@ -117,9 +137,12 @@ wechat-article-generator/
 ├── src/
 │   ├── components/          # Vue组件
 │   │   ├── ArticleGenerator.vue   # 主界面组件
-│   │   └── VditorEditor.vue       # Vditor编辑器封装
+│   │   ├── VditorEditor.vue       # Vditor编辑器封装
+│   │   ├── AIConfigDialog.vue     # AI配置对话框
+│   │   └── HistoryDialog.vue      # 历史记录对话框
 │   ├── services/            # 服务层
-│   │   └── aiService.js     # AI服务和记忆管理
+│   │   ├── aiService.js     # AI服务和记忆管理
+│   │   └── historyService.js # 历史记录管理
 │   ├── utils/               # 工具函数
 │   │   └── storage.js       # 本地存储工具
 │   ├── styles/              # 样式文件
@@ -130,7 +153,8 @@ wechat-article-generator/
 ├── index.html               # HTML模板
 ├── vite.config.js           # Vite配置
 ├── package.json             # 依赖配置
-└── README.md                # 项目文档
+├── README.md                # 项目文档
+└── HISTORY_FEATURE.md       # 历史记录功能说明
 ```
 
 ## 核心代码说明
@@ -148,6 +172,22 @@ AI服务类提供以下功能：
 - `exportConversation()` - 导出对话记忆
 - `importConversation(data)` - 导入对话记忆
 - `clearConversation()` - 清空对话记忆
+
+### 历史记录服务 (historyService.js)
+
+历史记录服务类提供以下功能：
+
+- `getHistory()` - 获取所有历史记录
+- `saveToHistory(article)` - 保存文章到历史记录
+- `deleteHistory(id)` - 删除单条历史记录
+- `deleteMultiple(ids)` - 批量删除历史记录
+- `clearHistory()` - 清空所有历史记录
+- `getHistoryById(id)` - 根据ID获取历史记录
+- `searchHistory(keyword)` - 搜索历史记录
+- `filterHistory(filters)` - 按条件筛选历史记录
+- `exportHistory()` - 导出历史记录
+- `importHistory(data)` - 导入历史记录
+- `getStatistics()` - 获取统计信息
 
 ### Vditor编辑器组件
 
