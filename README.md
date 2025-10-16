@@ -31,6 +31,7 @@
 ### 1. 安装依赖
 
 ```bash
+git clone https://github.com/lxd2study/WeChat-article.git
 cd wechat-article-generator
 npm install
 ```
