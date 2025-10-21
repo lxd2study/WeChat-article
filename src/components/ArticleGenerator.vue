@@ -351,8 +351,10 @@ const optimizeArticle = async () => {
   isOptimizing.value = true
 
   try {
+    // 获取完整内容（包含base64图片）进行优化
+    const fullContent = editorRef.value?.getFullValue() || articleContent.value
     const optimized = await aiService.optimizeArticle(
-      articleContent.value,
+      fullContent,
       optimizeInstruction.value
     )
     articleContent.value = optimized
@@ -374,7 +376,9 @@ const continueArticle = async () => {
   isContinuing.value = true
 
   try {
-    const continued = await aiService.continueArticle(articleContent.value)
+    // 获取完整内容（包含base64图片）进行续写
+    const fullContent = editorRef.value?.getFullValue() || articleContent.value
+    const continued = await aiService.continueArticle(fullContent)
     articleContent.value += '\n\n' + continued
 
     // 保存续写后的文章到历史记录
@@ -446,7 +450,9 @@ const importMemory = () => {
 
 // 复制文章
 const copyArticle = () => {
-  navigator.clipboard.writeText(articleContent.value).then(() => {
+  // 获取完整内容（包含base64图片）
+  const fullContent = editorRef.value?.getFullValue() || articleContent.value
+  navigator.clipboard.writeText(fullContent).then(() => {
     ElMessage.success('文章已复制到剪贴板')
   }).catch(() => {
     ElMessage.error('复制失败')
@@ -455,7 +461,9 @@ const copyArticle = () => {
 
 // 下载文章
 const downloadArticle = () => {
-  const blob = new Blob([articleContent.value], { type: 'text/markdown' })
+  // 获取完整内容（包含base64图片）
+  const fullContent = editorRef.value?.getFullValue() || articleContent.value
+  const blob = new Blob([fullContent], { type: 'text/markdown' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
@@ -482,9 +490,11 @@ const handleSaveConfig = (config) => {
 // 保存到历史记录
 const saveToHistory = (article) => {
   try {
+    // 获取完整内容（包含base64图片）
+    const fullContent = editorRef.value?.getFullValue() || article
     historyService.saveToHistory({
       topic: formData.value.topic,
-      content: article,
+      content: fullContent,
       style: formData.value.style,
       length: formData.value.length,
       targetAudience: formData.value.targetAudience,
