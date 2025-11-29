@@ -5,6 +5,7 @@
 现在你的微信文章生成器已经支持灵活的 AI 配置功能：
 
 ### 1. 编辑器自动高度调整
+
 - **VditorEditor** 组件现在会根据内容自动调整高度
 - 当生成的内容很长时，编辑器会自动扩展显示所有内容
 - 最小高度为 400px，确保编辑体验舒适
@@ -14,6 +15,7 @@
 在文章生成控制台右上角，点击"AI 配置"按钮，可以配置以下内容：
 
 #### 基础配置
+
 - **API Provider**: 选择 AI 服务提供商
   - OpenAI（GPT 系列）
   - Anthropic Claude（Claude 系列）
@@ -33,6 +35,7 @@
   - 支持手动输入其他模型
 
 #### 高级设置
+
 - **Temperature** (0-2): 控制生成内容的随机性
   - 0: 最精确、最确定性的输出
   - 1: 平衡的输出（推荐）
@@ -49,6 +52,7 @@
 ## 使用示例
 
 ### OpenAI 配置示例
+
 ```
 Provider: OpenAI
 API Key: sk-xxx...
@@ -59,6 +63,7 @@ Max Tokens: 4000
 ```
 
 ### Claude 配置示例
+
 ```
 Provider: Anthropic Claude
 API Key: sk-ant-xxx...
@@ -69,6 +74,7 @@ Max Tokens: 4000
 ```
 
 ### 自定义代理示例
+
 ```
 Provider: 自定义
 API Key: 你的密钥
@@ -110,6 +116,7 @@ Max Tokens: 4000
 如果不想使用配置界面，仍然可以通过环境变量设置默认值：
 
 创建 `.env` 文件：
+
 ```env
 VITE_AI_API_KEY=your-api-key
 VITE_AI_API_URL=https://api.openai.com/v1/chat/completions
@@ -132,5 +139,3 @@ VITE_AI_MODEL=gpt-4
 - ✅ 配置本地持久化
 - ✅ 高级参数调整
 - ✅ 自定义系统提示词
-
-
