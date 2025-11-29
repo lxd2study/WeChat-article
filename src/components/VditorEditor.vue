@@ -56,10 +56,14 @@ onMounted(() => {
   // 保存原始内容
   originalContent = props.modelValue
 
+  // 检测当前主题
+  const isDarkTheme = document.documentElement.getAttribute('data-theme') === 'dark'
+  const vditorTheme = isDarkTheme ? 'dark' : 'classic'
+
   vditor = new Vditor(editorRef.value, {
     height: actualHeight,
     minHeight: props.minHeight,
-    theme: 'classic',
+    theme: vditorTheme,
     mode: 'wysiwyg', // 所见即所得模式
     placeholder: '请输入文章内容，支持Markdown格式...',
     value: props.modelValue,
@@ -108,6 +112,9 @@ onMounted(() => {
 
       // 监听编辑器模式切换，在源码模式下处理base64显示
       setupBase64Handler()
+      
+      // 监听主题变化
+      setupThemeObserver()
     },
     input: (value) => {
       // 保存完整的原始内容
@@ -124,6 +131,27 @@ onMounted(() => {
     }
   })
 })
+
+// 设置主题变化监听
+const setupThemeObserver = () => {
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+        const isDarkTheme = document.documentElement.getAttribute('data-theme') === 'dark'
+        const vditorTheme = isDarkTheme ? 'dark' : 'classic'
+        
+        if (vditor) {
+          vditor.setTheme(vditorTheme)
+        }
+      }
+    })
+  })
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme']
+  })
+}
 
 // 自动调整编辑器高度
 const adjustEditorHeight = () => {
@@ -260,25 +288,41 @@ onBeforeUnmount(() => {
 .vditor-wrapper {
   border-radius: 8px;
   overflow: visible;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px var(--shadow-color);
   min-height: 400px;
+  background-color: var(--bg-primary);
+  transition: all 0.3s ease;
 }
 
 :deep(.vditor) {
   border: none;
   display: flex;
   flex-direction: column;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 :deep(.vditor-toolbar) {
-  background-color: #f5f7fa;
-  border-bottom: 1px solid #e4e7ed;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
   flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+:deep(.vditor-toolbar__item) {
+  color: var(--text-primary);
+}
+
+:deep(.vditor-toolbar__item:hover) {
+  background-color: var(--bg-tertiary);
+  color: var(--accent-color);
 }
 
 :deep(.vditor-content) {
-  background-color: #fff;
+  background-color: var(--bg-primary);
   min-height: 300px;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
 }
 
 /* 自适应容器 */
@@ -345,19 +389,182 @@ onBeforeUnmount(() => {
 :deep(.vditor-ir img[src^="data:image"]) {
   max-width: 100%;
   height: auto;
-  border: 1px solid #e4e7ed;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   padding: 4px;
-  background: #fff;
+  background: var(--bg-primary);
+  transition: all 0.3s ease;
 }
 
 /* 预览区域的图片样式 */
 :deep(.vditor-preview img[src^="data:image"]) {
   max-width: 100%;
   height: auto;
-  border: 1px solid #e4e7ed;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   padding: 4px;
-  background: #fff;
+  background: var(--bg-primary);
+  transition: all 0.3s ease;
+}
+
+/* 预览区域样式 */
+:deep(.vditor-preview) {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+:deep(.vditor-preview pre) {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+:deep(.vditor-preview code) {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* 源码编辑器样式 */
+:deep(.vditor-sv__textarea) {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+/* IR模式样式 */
+:deep(.vditor-ir) {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+:deep(.vditor-ir__node) {
+  color: var(--text-primary);
+}
+
+:deep(.vditor-ir__link) {
+  color: var(--accent-color);
+}
+
+/* 分屏预览样式 */
+:deep(.vditor--preview .vditor-sv__textarea) {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* 计数器样式 */
+:deep(.vditor-counter) {
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-color);
+}
+
+/* 编辑器工具栏按钮样式 */
+:deep(.vditor-toolbar__item) {
+  color: var(--text-secondary);
+  background-color: transparent;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+:deep(.vditor-toolbar__item:hover) {
+  background-color: var(--bg-tertiary);
+  color: var(--accent-color);
+}
+
+:deep(.vditor-toolbar__item--current) {
+  background-color: var(--bg-tertiary);
+  color: var(--accent-color);
+}
+
+/* 编辑器内容区域 */
+:deep(.vditor-wysiwyg) {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+:deep(.vditor-wysiwyg pre) {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+:deep(.vditor-wysiwyg blockquote) {
+  border-left-color: var(--accent-color);
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+:deep(.vditor-wysiwyg table) {
+  border-color: var(--border-color);
+}
+
+:deep(.vditor-wysiwyg table th) {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+:deep(.vditor-wysiwyg table td) {
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+:deep(.vditor-wysiwyg a) {
+  color: var(--accent-color);
+}
+
+:deep(.vditor-wysiwyg a:hover) {
+  color: var(--accent-color);
+  opacity: 0.8;
+}
+
+/* 源码模式样式 */
+:deep(.vditor-sv) {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+:deep(.vditor-sv__textarea) {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border: none;
+  outline: none;
+}
+
+/* 预览模式样式 */
+:deep(.vditor-preview) {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+:deep(.vditor-preview h1),
+:deep(.vditor-preview h2),
+:deep(.vditor-preview h3),
+:deep(.vditor-preview h4),
+:deep(.vditor-preview h5),
+:deep(.vditor-preview h6) {
+  color: var(--text-primary);
+  border-bottom-color: var(--border-color);
+}
+
+:deep(.vditor-preview p) {
+  color: var(--text-secondary);
+}
+
+:deep(.vditor-preview ul),
+:deep(.vditor-preview ol) {
+  color: var(--text-secondary);
+}
+
+:deep(.vditor-preview blockquote) {
+  border-left-color: var(--accent-color);
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+/* 分隔线 */
+:deep(.vditor-toolbar__divider) {
+  background-color: var(--border-color);
 }
 </style>

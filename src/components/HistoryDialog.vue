@@ -619,20 +619,20 @@ onMounted(() => {
 
 .preview-info h2 {
   margin: 0 0 15px 0;
-  color: #303133;
+  color: var(--text-primary);
 }
 
 .preview-meta {
   display: flex;
   gap: 15px;
   align-items: center;
-  color: #909399;
+  color: var(--text-tertiary);
   font-size: 14px;
 }
 
 .preview-body {
   line-height: 1.8;
-  color: #606266;
+  color: var(--text-secondary);
 }
 
 .preview-body :deep(h1),
@@ -640,7 +640,7 @@ onMounted(() => {
 .preview-body :deep(h3) {
   margin-top: 20px;
   margin-bottom: 10px;
-  color: #303133;
+  color: var(--text-primary);
 }
 
 .preview-body :deep(p) {
@@ -648,16 +648,118 @@ onMounted(() => {
 }
 
 .preview-body :deep(code) {
-  background: #f5f7fa;
+  background: var(--bg-tertiary);
   padding: 2px 6px;
   border-radius: 3px;
   font-family: monospace;
+  color: var(--text-primary);
 }
 
 .preview-body :deep(pre) {
-  background: #f5f7fa;
+  background: var(--bg-tertiary);
   padding: 15px;
   border-radius: 4px;
   overflow-x: auto;
+  color: var(--text-primary);
+}
+
+.dialog-header {
+  color: var(--text-primary);
+}
+
+.toolbar {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+:deep(.el-input__wrapper) {
+  background-color: var(--bg-primary);
+  border-color: var(--border-color);
+  transition: all 0.3s ease;
+}
+
+:deep(.el-input__wrapper:hover) {
+  border-color: var(--accent-color);
+}
+
+:deep(.el-input__wrapper.is-focus) {
+  border-color: var(--accent-color);
+}
+
+:deep(.el-input__inner) {
+  color: var(--text-primary);
+  background-color: transparent;
+}
+
+:deep(.el-input__inner::placeholder) {
+  color: var(--text-tertiary);
+}
+
+:deep(.el-select__wrapper) {
+  background-color: var(--bg-primary);
+  border-color: var(--border-color);
+  transition: all 0.3s ease;
+}
+
+:deep(.el-select__wrapper:hover) {
+  border-color: var(--accent-color);
+}
+
+:deep(.el-select__wrapper.is-focus) {
+  border-color: var(--accent-color);
+}
+
+:deep(.el-select__selected-item) {
+  color: var(--text-primary);
+}
+
+:deep(.el-select__placeholder) {
+  color: var(--text-tertiary);
+}
+
+:deep(.el-table) {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+:deep(.el-table__header-wrapper) {
+  background-color: var(--bg-secondary);
+}
+
+:deep(.el-table th) {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+:deep(.el-table td) {
+  border-color: var(--border-color);
+}
+
+:deep(.el-table__row:hover) {
+  background-color: var(--bg-tertiary);
+}
+
+:deep(.el-empty__description) {
+  color: var(--text-secondary);
+}
+
+:deep(.el-pagination) {
+  color: var(--text-primary);
+}
+
+:deep(.el-pagination .el-pager li) {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+:deep(.el-pagination .el-pager li:hover) {
+  background-color: var(--bg-tertiary);
+}
+
+:deep(.el-pagination .el-pager li.is-active) {
+  background-color: var(--accent-color);
+  color: white;
 }
 </style>

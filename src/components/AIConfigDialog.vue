@@ -266,7 +266,7 @@ const handleClose = () => {
 <style scoped>
 .form-help {
   font-size: 12px;
-  color: #909399;
+  color: var(--text-tertiary);
   margin-top: 4px;
   line-height: 1.5;
 }
@@ -280,10 +280,78 @@ const handleClose = () => {
 :deep(.el-divider__text) {
   font-size: 14px;
   font-weight: 500;
-  color: #606266;
+  color: var(--text-secondary);
+  background-color: var(--bg-primary);
 }
 
 :deep(.el-slider__marks-text) {
   font-size: 12px;
+  color: var(--text-secondary);
+}
+
+:deep(.el-form-item__label) {
+  color: var(--text-primary);
+}
+
+:deep(.el-input__wrapper) {
+  background-color: var(--bg-primary);
+  border-color: var(--border-color);
+  transition: all 0.3s ease;
+}
+
+:deep(.el-input__wrapper:hover) {
+  border-color: var(--accent-color);
+}
+
+:deep(.el-input__wrapper.is-focus) {
+  border-color: var(--accent-color);
+}
+
+:deep(.el-input__inner) {
+  color: var(--text-primary);
+  background-color: transparent;
+}
+
+:deep(.el-input__inner::placeholder) {
+  color: var(--text-tertiary);
+}
+
+:deep(.el-select__wrapper) {
+  background-color: var(--bg-primary);
+  border-color: var(--border-color);
+  transition: all 0.3s ease;
+}
+
+:deep(.el-select__wrapper:hover) {
+  border-color: var(--accent-color);
+}
+
+:deep(.el-select__wrapper.is-focus) {
+  border-color: var(--accent-color);
+}
+
+:deep(.el-select__selected-item) {
+  color: var(--text-primary);
+}
+
+:deep(.el-select__placeholder) {
+  color: var(--text-tertiary);
+}
+
+:deep(.el-slider__runway) {
+  background-color: var(--bg-tertiary);
+}
+
+:deep(.el-slider__bar) {
+  background-color: var(--accent-color);
+}
+
+:deep(.el-slider__button) {
+  border-color: var(--accent-color);
+  background-color: var(--bg-primary);
+}
+
+:deep(.el-divider) {
+  border-color: var(--border-color);
 }
 </style>

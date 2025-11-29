@@ -7,7 +7,10 @@
             <el-icon><EditPen /></el-icon>
             AI微信公众号文章生成器
           </h1>
-          <el-tag type="success">智能AI助手</el-tag>
+          <div class="header-right">
+            <el-tag type="success">智能AI助手</el-tag>
+            <ThemeToggle />
+          </div>
         </div>
       </el-header>
       <el-main class="app-main">
@@ -20,6 +23,7 @@
 <script setup>
 import { EditPen } from '@element-plus/icons-vue'
 import ArticleGenerator from './components/ArticleGenerator.vue'
+import ThemeToggle from './components/ThemeToggle.vue'
 </script>
 
 <style scoped>
@@ -30,16 +34,18 @@ import ArticleGenerator from './components/ArticleGenerator.vue'
 
 .app-container {
   height: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
+  transition: background 0.3s ease;
 }
 
 .app-header {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--bg-primary);
   backdrop-filter: blur(10px);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px var(--shadow-color);
   display: flex;
   align-items: center;
   padding: 0 30px;
+  transition: background-color 0.3s ease;
 }
 
 .header-content {
@@ -52,10 +58,16 @@ import ArticleGenerator from './components/ArticleGenerator.vue'
 .header-content h1 {
   margin: 0;
   font-size: 24px;
-  color: #303133;
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
 .app-main {
